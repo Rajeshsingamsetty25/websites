@@ -1,0 +1,64 @@
+-- Creating the database
+CREATE DATABASE trendy_groceries_nz;
+
+-- Using the created database
+USE trendy_groceries_nz;
+
+-- Creating the products table
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255),
+    stock INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Creating the users table
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(15),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Creating the cart table
+CREATE TABLE cart (
+    cart_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Creating the cart_items table
+CREATE TABLE cart_items (
+    cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT,
+    product_id INT,
+    quantity INT NOT NULL,
+    FOREIGN KEY (cart_id) REFERENCES cart(cart_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+-- Creating the orders table
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total DECIMAL(10, 2) NOT NULL,
+    address TEXT NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Inserting dummy New Zealand products
+INSERT INTO products (name, price, image_url, stock) VALUES
+('Fresh Kiwifruit', 4.99, 'images/kiwifruit.jpg', 100),
+('Organic Kumara', 2.49, 'images/kumara.jpg', 200),
+('Full Cream Milk', 3.29, 'images/milk.jpg', 150),
+('Sourdough Bread', 3.99, 'images/bread.jpg', 120),
+('Manuka Honey', 19.99, 'images/honey.jpg', 50),
+('Hokey Pokey Ice Cream', 6.49, 'images/icecream.jpg', 80);
